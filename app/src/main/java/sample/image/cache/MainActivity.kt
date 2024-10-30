@@ -117,7 +117,7 @@ private fun PokemonScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Step3 - Disk Cache", color = Color.White)
+                    Text(text = "Step4 - LRU Cache", color = Color.White)
                 },
                 colors = TopAppBarColors(
                     containerColor = Color.Gray,

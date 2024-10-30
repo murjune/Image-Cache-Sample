@@ -1,12 +1,15 @@
 package sample.image.cache
 
 import android.graphics.Bitmap
+import androidx.collection.LruCache
+import androidx.collection.lruCache
 
 class ImageLoader(
     private val imageService: ImageService,
     private val imageSaver: ImageSaver
 ) {
-    private val cachedImages: MutableMap<String, Bitmap> = mutableMapOf<String, Bitmap>()
+    private val cachedImages: LruCache<String, Bitmap> =
+        lruCache(cacheSize(), sizeOf = { _, value -> value.byteCount / 1024 })
 
     suspend fun bitmaps(urls: List<String>): List<Bitmap> {
         if (isMemoryCached(urls)) {
@@ -28,7 +31,7 @@ class ImageLoader(
     }
 
     private fun isMemoryCached(urls: List<String>): Boolean {
-        return cachedImages.keys.containsAll(urls.toSet())
+        return urls.all { cachedImages[it] != null }
     }
 
     private suspend fun isDiskCached(urls: List<String>): Boolean {
@@ -36,13 +39,18 @@ class ImageLoader(
     }
 
     suspend fun clearCache() {
-        cachedImages.clear()
+        cachedImages.evictAll()
         imageSaver.clear()
     }
 
     private fun cacheImages(keys: List<String>, images: List<Bitmap>) {
         keys.forEachIndexed { index, key ->
-            cachedImages[key] = images[index]
+            cachedImages.put(key, images[index])
         }
+    }
+
+    private fun cacheSize(): Int {
+        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
+        return maxMemory / 8
     }
 }
