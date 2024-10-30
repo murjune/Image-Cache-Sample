@@ -3,6 +3,11 @@
 이미지 캐시를 적용하여 이미지 로딩 속도를 개선하는 샘플 앱입니다.
 브랜치 별로 다양한 캐시 전략을 적용해볼 수 있습니다!
 
+- [Step1 : No Cache](https://github.com/murjune/Image-Cache-Sample/tree/step1-no-cache)
+- [Step2 : Memory Cache](https://github.com/murjune/Image-Cache-Sample/tree/step2-memory-cache)
+- [Step3 : Disk Cache](https://github.com/murjune/Image-Cache-Sample/tree/step3-disk-cache)
+- [Step4 : LRU Cache](https://github.com/murjune/Image-Cache-Sample/tree/step4-lru-cache)
+
 ---
 
 ## 소개
@@ -231,7 +236,7 @@ lruCache() 팩토리 함수를 통해 `LRUCache` 를 생성하였습니다.
 - `sizeOf` 는 캐시에 저장될 데이터 `하나`의 크기를 계산하는 람다입니다.
 
 만약, 캐시에 추가된 Bitmap 의 `byteCount` 가 `1024` 보다 크다면, `1KB` 단위로 캐시에 저장됩니다.
-lruCache() 의 사용법이 궁금하시다면 [lruCache 학습테스트](아직 없음) 를 참고해주세요!
+lruCache() 의 사용법이 궁금하시다면 [lruCache 학습테스트](https://github.com/murjune/Image-Cache-Sample/blob/step4-lru-cache/app/src/test/java/sample/image/cache/LRUCacheStudyTest.kt) 를 참고해주세요!
 
 > 왜 `maxMemory / 8` 로 설정했을까요? 🤔
 > 
