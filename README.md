@@ -72,9 +72,9 @@
 
 # 3. 실습 - 이미지 캐시
 
-> 자세한 코드는 [실습 깃허브 주소](아직 push 안함!)에서 확인할 수 있습니다!
+> 자세한 코드는 [실습 깃허브 주소](https://github.com/murjune/Image-Cache-Sample?tab=readme-ov-file)에서 확인할 수 있습니다!
 
-![img_1.png](img_1.png)
+![img_1.png](image/img_1.png)
 
 이미지 URL 을 통해 이미지를 불러와 화면에 랜더링하는 간단한 샘플앱을 만들어보겠습니다.
 
