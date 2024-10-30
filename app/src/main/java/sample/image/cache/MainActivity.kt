@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,10 +44,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import sample.image.cache.ui.theme.ImageCacheSampleTheme
 
 class MainActivity : ComponentActivity() {
-    val imageLoader = ImageLoader(ImageService())
+    private val imageLoader by lazy {
+        ImageLoader(ImageService(), ImageSaver(applicationContext))
+    }
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +60,7 @@ class MainActivity : ComponentActivity() {
             ImageCacheSampleTheme {
                 var images by remember { mutableStateOf(emptyList<Bitmap>()) }
                 val refreshState = rememberPullToRefreshState()
-
+                val scope = rememberCoroutineScope()
                 LaunchedEffect(key1 = refreshState.isRefreshing) {
                     if (refreshState.isRefreshing) {
                         imageLoader.bitmaps(pokemonUrls(20))
@@ -74,7 +78,9 @@ class MainActivity : ComponentActivity() {
                         .nestedScroll(refreshState.nestedScrollConnection)
                 ) {
                     PokemonScreen(refreshState.isRefreshing, images = images, onClearCache = {
-                        imageLoader.clearCache()
+                        scope.launch {
+                            imageLoader.clearCache()
+                        }
                     })
 
                     PullToRefreshContainer(
@@ -111,7 +117,7 @@ private fun PokemonScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Step2 - Memory Cache", color = Color.White)
+                    Text(text = "Step3 - Disk Cache", color = Color.White)
                 },
                 colors = TopAppBarColors(
                     containerColor = Color.Gray,
