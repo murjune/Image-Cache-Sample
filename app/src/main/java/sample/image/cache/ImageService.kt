@@ -7,8 +7,7 @@ import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
-class PokemonImageService {
-
+class ImageService {
     suspend fun bitmaps(urls: List<String>): List<Bitmap> = withContext(Dispatchers.IO) {
         urls.map { url ->
             val connection = URL(url).openConnection() as HttpURLConnection

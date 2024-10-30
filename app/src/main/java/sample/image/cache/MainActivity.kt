@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.sp
 import sample.image.cache.ui.theme.ImageCacheSampleTheme
 
 class MainActivity : ComponentActivity() {
-    val imageLoader = ImageLoader(PokemonImageService())
+    val imageLoader = ImageLoader(ImageService())
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +73,9 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .nestedScroll(refreshState.nestedScrollConnection)
                 ) {
-                    PokemonScreen(refreshState.isRefreshing, images = images)
+                    PokemonScreen(refreshState.isRefreshing, images = images, onClearCache = {
+                        imageLoader.clearCache()
+                    })
 
                     PullToRefreshContainer(
                         state = refreshState,
@@ -102,13 +104,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun PokemonScreen(
     isLoading: Boolean,
-    images: List<Bitmap>
+    images: List<Bitmap>,
+    onClearCache: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Step1 - No Cache", color = Color.White)
+                    Text(text = "Step2 - Memory Cache", color = Color.White)
                 },
                 colors = TopAppBarColors(
                     containerColor = Color.Gray,
@@ -121,7 +124,7 @@ private fun PokemonScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                // TODO 캐시 비우기
+                onClearCache()
             }) {
                 Icon(
                     imageVector = Icons.Default.Delete,
